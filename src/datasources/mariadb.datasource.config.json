@@ -1,0 +1,10 @@
+{
+  "name": "mariadb",
+  "connector": "mysql",
+  "url": "mysql://petofthemonth:petofthemonth@127.0.0.1/petofthemonth",
+  "host": "127.0.0.1",
+  "port": 3306,
+  "user": "petofthemonth",
+  "password": "petofthemonth",
+  "database": "petofthemonth"
+}
