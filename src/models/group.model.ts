@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Pet} from './pet.model';
 
 @model()
 export class Group extends Entity {
@@ -25,6 +26,8 @@ export class Group extends Entity {
   })
   image?: string;
 
+  @hasMany(() => Pet)
+  pets: Pet[];
 
   constructor(data?: Partial<Group>) {
     super(data);

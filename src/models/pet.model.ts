@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {Group} from './group.model';
+import {Point} from './point.model';
 
 @model()
 export class Pet extends Entity {
@@ -30,6 +32,11 @@ export class Pet extends Entity {
   })
   image?: string;
 
+  @belongsTo(() => Group)
+  groupId: number;
+
+  @hasMany(() => Point)
+  points: Point[];
 
   constructor(data?: Partial<Pet>) {
     super(data);
