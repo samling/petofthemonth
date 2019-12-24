@@ -28,7 +28,7 @@ export class UserController {
     const isPasswordMatched = user.password === credentials.password;
     if (!isPasswordMatched) throw new HttpErrors.Unauthorized('Invalid credentials');
 
-    const tokenObject = {username: credentials.username};
+    const tokenObject = {username: credentials.username, exp: Math.floor(Date.now() / 1000) + 86400};
     const token = await signAsync(tokenObject, JWT_SECRET);
     const roles = await this.userRoleRepository.find({where: {userId: user.id}});
     const {id, email} = user;

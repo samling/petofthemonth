@@ -71,13 +71,13 @@ export class PingController {
   }
 
   @get('/ping/has-any-role')
-  @secured(SecuredType.HAS_ANY_ROLE, ['ADMIN', 'ADMIN2'])
+  @secured(SecuredType.HAS_ANY_ROLE, ['admin', 'admin'])
   testHasAnyRole() {
     return {message: 'hasAnyRole: OK'};
   }
 
   @get('/ping/has-roles')
-  @secured(SecuredType.HAS_ROLES, ['ADMIN', 'ADMIN2'])
+  @secured(SecuredType.HAS_ROLES, ['admin', 'admin'])
   testHasRoles() {
     return {message: 'hasRoles: OK'};
   }
