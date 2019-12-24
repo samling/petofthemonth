@@ -9,7 +9,9 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
-import {AuthenticationComponent} from '@loopback/authentication';
+import { AuthenticationBindings } from '@loopback/authentication';
+import { MyAuthMetadataProvider, MyAuthAuthenticationStrategyProvider, MyAuthActionProvider, MyAuthBindings } from './auth';
+import { UserRepository, RoleRepository, UserRoleRepository } from './repositories';
 
 export class PetofthemonthApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -29,8 +31,10 @@ export class PetofthemonthApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
-    // Authentication
-    this.component(AuthenticationComponent);
+    // this.component(AuthenticationComponent);
+    this.bind(AuthenticationBindings.METADATA).toProvider(MyAuthMetadataProvider);
+    this.bind(MyAuthBindings.STRATEGY).toProvider(MyAuthAuthenticationStrategyProvider);
+    this.bind(AuthenticationBindings.AUTH_ACTION).toProvider(MyAuthActionProvider);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
