@@ -52,14 +52,7 @@ def create_group(group: schemas.GroupCreate, db: Session = Depends(get_db)):
 
 @app.patch("/groups/{group_id}/users/{user_id}", response_model=schemas.Group)
 def update_group_users(group_id: int, user_id: int, db: Session = Depends(get_db)):
-    group = crud.get_group(db, group_id=group_id)
-    user = crud.get_user(db, user_id=user_id)
-    group.users.append(user)
-    db.add(group)
-    db.commit()
-    db.refresh(group)
-
-    return group
+    return crud.update_group_users(db, group_id=group_id, user_id=user_id)
 
 @app.get("/groups/", response_model=list[schemas.Group])
 def read_groups(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):

@@ -39,6 +39,16 @@ def create_group(db: Session, group: schemas.GroupCreate):
     db.refresh(db_group)
     return db_group
 
+def update_group_users(db: Session, group_id: int, user_id: int):
+    db_group = get_group(db, group_id=group_id)
+    db_user = get_user(db, user_id=user_id)
+    db_group.users.append(db_user)
+    db.add(db_group)
+    db.commit()
+    db.refresh(db_group)
+
+    return db_group
+
 # Pets
 def get_pet(db: Session, pet_id: int):
     return db.query(models.Pet).filter(models.Pet.id == pet_id).first()
