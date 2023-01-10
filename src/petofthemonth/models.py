@@ -9,6 +9,16 @@ user_groups = Table('user_groups', Base.metadata, \
     Column('group_id', ForeignKey('groups.id'), primary_key=True)
 )
 
+user_pets = Table('user_pets', Base.metadata, \
+    Column('user_id', ForeignKey('users.id'), primary_key=True), \
+    Column('pet_id', ForeignKey('pets.id'), primary_key=True)
+)
+
+group_pets = Table('group_pets', Base.metadata, \
+    Column('group_id', ForeignKey('groups.id'), primary_key=True), \
+    Column('pet_id', ForeignKey('pets.id'), primary_key=True)
+)
+
 class User(Base):
     __tablename__ = "users"
 
@@ -21,6 +31,8 @@ class User(Base):
 
     groups = relationship("Group", secondary='user_groups', back_populates="users")
 
+    pets = relationship("Pet", secondary='user_pets', back_populates="owners")
+
 class Group(Base):
     __tablename__ = "groups"
 
@@ -31,7 +43,7 @@ class Group(Base):
 
     users = relationship("User", secondary='user_groups', back_populates="groups")
 
-    pets = relationship("Pet", back_populates="group")
+    pets = relationship("Pet", secondary='group_pets', back_populates="groups")
 
 class Pet(Base):
     __tablename__ = "pets"
@@ -44,10 +56,10 @@ class Pet(Base):
     height = Column(Integer)
     weight = Column(Integer)
     description = Column(String)
-    group_id = Column(Integer, ForeignKey("groups.id"))
 
     points = relationship("Point", back_populates="pet")
-    group = relationship("Group", back_populates="pets")
+    groups = relationship("Group", secondary='group_pets', back_populates="pets")
+    owners = relationship("User", secondary='user_pets', back_populates="pets")
 
 class Point(Base):
     __tablename__ = "points"
