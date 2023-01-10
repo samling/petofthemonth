@@ -61,10 +61,10 @@ def update_group_pets(db: Session, group_id: int, pet_id: int):
 
 # Pets
 def get_pet(db: Session, pet_id: int):
-    return db.query(models.Pet).options(joinedload(models.Pet.owners), joinedload(models.Pet.groups)).filter(models.Pet.id == pet_id).first()
+    return db.query(models.Pet).options(joinedload(models.Pet.users), joinedload(models.Pet.groups)).filter(models.Pet.id == pet_id).first()
 
 def get_pets(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Pet).options(joinedload(models.Pet.owners), joinedload(models.Pet.groups)).offset(skip).limit(limit).all()
+    return db.query(models.Pet).options(joinedload(models.Pet.users), joinedload(models.Pet.groups)).offset(skip).limit(limit).all()
 
 def create_pet(db: Session, pet: schemas.PetCreate):
     db_pet = models.Pet(**pet.dict())
@@ -73,18 +73,18 @@ def create_pet(db: Session, pet: schemas.PetCreate):
     db.refresh(db_pet)
     return db_pet
 
-def create_owner_pet(db: Session, pet: schemas.PetCreate, user_id: int):
-    owner = get_user(db, user_id)
-    db_pet = models.Pet(**pet.dict(), owners=[owner])
+def create_user_pet(db: Session, pet: schemas.PetCreate, user_id: int):
+    user = get_user(db, user_id)
+    db_pet = models.Pet(**pet.dict(), users=[user])
     db.add(db_pet)
     db.commit()
     db.refresh(db_pet)
     return db_pet
 
-def update_pet_owners(db: Session, pet_id: int, user_id: int):
+def update_pet_users(db: Session, pet_id: int, user_id: int):
     db_pet = get_pet(db, pet_id=pet_id)
-    owner = get_user(db, user_id=user_id)
-    db_pet.owners.append(owner)
+    user = get_user(db, user_id=user_id)
+    db_pet.users.append(user)
     db.add(db_pet)
     db.commit()
     db.refresh(db_pet)

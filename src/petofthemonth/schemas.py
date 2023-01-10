@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 from datetime import datetime
 
@@ -58,17 +58,27 @@ class Point(PointBase):
 
 class Pet(PetBase):
     id: int
-    points: list[PointBase] = []
-    groups: list[GroupBase] = []
-    owners: list[UserBase] = []
 
 class User(UserBase):
     id: int
     is_active: bool
-    groups: list[GroupBase] = []
-    pets: list[PetBase] = []
 
 class Group(GroupBase):
     id: int
-    pets: list[PetBase] = []
-    users: list[UserBase] = []
+
+class UserRead(User):
+    id: int
+    is_active: bool
+    groups: list[Group] = []
+    pets: list[Pet] = []
+
+class GroupRead(Group):
+    id: int
+    pets: list[Pet] = []
+    users: list[User] = []
+
+class PetRead(Pet):
+    id: int
+    points: list[Point] = []
+    groups: list[Group] = []
+    users: list[User] = []

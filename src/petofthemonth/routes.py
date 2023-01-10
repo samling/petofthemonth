@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Request, Response, HTTPException
 from . import crud, schemas
 from sqlalchemy.orm import Session
 
@@ -12,12 +12,12 @@ def read_root():
     return "Hello world"
 
 # Users
-@router.get("/users/", response_model=list[schemas.User])
+@router.get("/users/", response_model=list[schemas.UserRead])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
-@router.get("/users/{user_id}", response_model=schemas.User)
+@router.get("/users/{user_id}", response_model=schemas.UserRead)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -29,17 +29,17 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 @router.post("/users/{user_id}/pets/", response_model=schemas.Pet)
-def create_pet_for_owner(user_id: int, pet: schemas.PetCreate, db: Session = Depends(get_db)):
-    return crud.create_owner_pet(db=db, pet=pet, user_id=user_id)
+def create_pet_for_user(user_id: int, pet: schemas.PetCreate, db: Session = Depends(get_db)):
+    return crud.create_user_pet(db=db, pet=pet, user_id=user_id)
 
 
 # Groups
-@router.get("/groups/", response_model=list[schemas.Group])
+@router.get("/groups/", response_model=list[schemas.GroupRead])
 def read_groups(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     groups = crud.get_groups(db, skip=skip, limit=limit)
     return groups
 
-@router.get("/groups/{group_id}", response_model=schemas.Group)
+@router.get("/groups/{group_id}", response_model=schemas.GroupRead)
 def read_group(group_id: int, db: Session = Depends(get_db)):
     db_group = crud.get_group(db, group_id=group_id)
     if db_group is None:
@@ -60,12 +60,12 @@ def update_group_pets(group_id: int, pet_id: int, db: Session = Depends(get_db))
 
 
 # Pets
-@router.get("/pets/", response_model=list[schemas.Pet])
+@router.get("/pets/", response_model=list[schemas.PetRead])
 def read_pets(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     pets = crud.get_pets(db, skip=skip, limit=limit)
     return pets
 
-@router.get("/pets/{pet_id}", response_model=schemas.Pet)
+@router.get("/pets/{pet_id}", response_model=schemas.PetRead)
 def read_pet(pet_id: int, db: Session = Depends(get_db)):
     db_pet = crud.get_pet(db, pet_id=pet_id)
     if db_pet is None:
@@ -76,9 +76,9 @@ def read_pet(pet_id: int, db: Session = Depends(get_db)):
 def create_pet(pet: schemas.PetCreate, db: Session = Depends(get_db)):
     return crud.create_pet(db=db, pet=pet)
 
-@router.patch("/pets/{pet_id}/owners/{owner_id}", response_model=schemas.Pet)
-def update_pet_owners(pet_id: int, user_id: int, db: Session = Depends(get_db)):
-    return crud.update_pet_owners(db, pet_id=pet_id, user_id=user_id)
+@router.patch("/pets/{pet_id}/users/{user_id}", response_model=schemas.Pet)
+def update_pet_users(pet_id: int, user_id: int, db: Session = Depends(get_db)):
+    return crud.update_pet_users(db, pet_id=pet_id, user_id=user_id)
 
 
 # Points

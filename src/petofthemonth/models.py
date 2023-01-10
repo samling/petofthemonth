@@ -31,7 +31,7 @@ class User(Base):
 
     groups = relationship("Group", secondary='user_groups', back_populates="users")
 
-    pets = relationship("Pet", secondary='user_pets', back_populates="owners")
+    pets = relationship("Pet", secondary='user_pets', back_populates="users")
 
 class Group(Base):
     __tablename__ = "groups"
@@ -59,7 +59,7 @@ class Pet(Base):
 
     points = relationship("Point", back_populates="pet")
     groups = relationship("Group", secondary='group_pets', back_populates="pets")
-    owners = relationship("User", secondary='user_pets', back_populates="pets")
+    users = relationship("User", secondary='user_pets', back_populates="pets")
 
 class Point(Base):
     __tablename__ = "points"
