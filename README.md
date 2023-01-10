@@ -14,8 +14,18 @@
 
 ## Running (Development)
 
-1. `python main.py`
+1. Start the API server:
+  ```
+  python main.py
+  ```
+
+1. Start the Vue server:
+  ```
+  npm run dev
+  ```
 
 ## Testing
+
+1. Navigate to `http://<ip>:5173` for the VueJS frontend
 
 1. Navigate to `http://<ip>:8000/docs` for the FastAPI application docs page
