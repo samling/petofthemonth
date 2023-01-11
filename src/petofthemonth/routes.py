@@ -32,6 +32,11 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 def create_pet_for_user(user_id: int, pet: schemas.PetCreate, db: Session = Depends(get_db)):
     return crud.create_user_pet(db=db, pet=pet, user_id=user_id)
 
+@router.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    response = crud.delete_user(db, user_id=user_id)
+    return response
+
 
 # Groups
 @router.get("/groups/", response_model=list[schemas.GroupRead])
@@ -58,6 +63,11 @@ def update_group_users(group_id: int, user_id: int, db: Session = Depends(get_db
 def update_group_pets(group_id: int, pet_id: int, db: Session = Depends(get_db)):
     return crud.update_group_pets(db, group_id=group_id, pet_id=pet_id)
 
+@router.delete("/groups/{group_id}")
+def delete_group(group_id: int, db: Session = Depends(get_db)):
+    response = crud.delete_group(db, group_id=group_id)
+    return response
+
 
 # Pets
 @router.get("/pets/", response_model=list[schemas.PetRead])
@@ -80,6 +90,11 @@ def create_pet(pet: schemas.PetCreate, db: Session = Depends(get_db)):
 def update_pet_users(pet_id: int, user_id: int, db: Session = Depends(get_db)):
     return crud.update_pet_users(db, pet_id=pet_id, user_id=user_id)
 
+@router.delete("/pets/{pet_id}")
+def delete_pet(pet_id: int, db: Session = Depends(get_db)):
+    response = crud.delete_pet(db, pet_id=pet_id)
+    return response
+
 
 # Points
 @router.get("/points/", response_model=list[schemas.Point])
@@ -98,3 +113,7 @@ def read_point(point_id: int, db: Session = Depends(get_db)):
 def create_point_for_pet(pet_id: int, point: schemas.PointCreate, db: Session = Depends(get_db)):
     return crud.create_pet_point(db=db, point=point, pet_id=pet_id)
 
+@router.delete("/points/{point_id}")
+def delete_point(point_id: int, db: Session = Depends(get_db)):
+    response = crud.delete_point(db, point_id=point_id)
+    return response

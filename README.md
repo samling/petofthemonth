@@ -21,7 +21,8 @@
 
 1. Start the Vue server:
   ```
-  npm run dev
+  npm run dev (local)
+  npm run dev -- --host (exposed)
   ```
 
 ## Testing

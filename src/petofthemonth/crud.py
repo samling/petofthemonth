@@ -25,6 +25,13 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def delete_user(db: Session, user_id: int):
+    db_user = get_user(db, user_id)
+    db.delete(db_user)
+    db.commit()
+
+    return { "ok": True }
+
 # Groups
 def get_group(db: Session, group_id: int):
     return db.query(models.Group).options(joinedload(models.Group.users), joinedload(models.Group.pets)).filter(models.Group.id == group_id).first()
@@ -59,6 +66,13 @@ def update_group_pets(db: Session, group_id: int, pet_id: int):
 
     return db_group
 
+def delete_group(db: Session, group_id: int):
+    db_group = get_group(db, group_id)
+    db.delete(db_group)
+    db.commit()
+
+    return { "ok": True }
+
 # Pets
 def get_pet(db: Session, pet_id: int):
     return db.query(models.Pet).options(joinedload(models.Pet.users), joinedload(models.Pet.groups)).filter(models.Pet.id == pet_id).first()
@@ -91,6 +105,13 @@ def update_pet_users(db: Session, pet_id: int, user_id: int):
 
     return db_pet
 
+def delete_pet(db: Session, pet_id: int):
+    db_pet = get_pet(db, pet_id)
+    db.delete(db_pet)
+    db.commit()
+
+    return { "ok": True }
+
 # Points
 def get_point(db: Session, point_id: int):
     return db.query(models.Point).filter(models.Point.id == point_id).first()
@@ -105,3 +126,9 @@ def create_pet_point(db: Session, point: schemas.PointCreate, pet_id: int):
     db.refresh(db_point)
     return db_point
 
+def delete_point(db: Session, point_id: int):
+    db_point = get_point(db, point_id)
+    db.delete(db_point)
+    db.commit()
+
+    return { "ok": True }
