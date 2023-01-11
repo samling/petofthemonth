@@ -23,12 +23,24 @@ def get_user(db: Session, username: str):
 
 
 def validate_user(db: Session, user: OAuth2PasswordRequestForm = Depends()):
-    db_user = get_user(db=db, username=user.username)
-
-    if not verify_password(user.password, db_user.password):
+    try:
+        db_user = get_user(db=db, username=user.username)
+    except AttributeError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+
+    if not hasattr(db_user, 'password'):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password"
+        )
+    else:
+        if not verify_password(user.password, db_user.password):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+            )
 
     return db_user
