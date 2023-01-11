@@ -1,10 +1,17 @@
+from fastapi import HTTPException
+from passlib.context import CryptContext
 from sqlalchemy.orm import Session, joinedload
 
 from . import models, schemas
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 # Users
 def get_user(db: Session, user_id: int):
     return db.query(models.User).options(joinedload(models.User.groups), joinedload(models.User.pets)).filter(models.User.id == user_id).first()
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).options(joinedload(models.User.groups), joinedload(models.User.pets)).filter(models.User.username == username).first()
 
 def get_user_by_email(db: Session, email: int):
     return db.query(models.User).options(joinedload(models.User.groups), joinedload(models.User.pets)).filter(models.User.email == email).first()
@@ -13,12 +20,14 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).options(joinedload(models.User.groups), joinedload(models.User.pets)).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    hashed_password = user.password + "somehash"
+    user.password = pwd_context.encrypt(user.password)
     db_user = models.User(
-        name=user.name,
+        username=user.username,
+        firstname=user.firstname,
+        lastname=user.lastname,
         email=user.email,
+        password=user.password,
         created_date=user.created_date,
-        hashed_password=hashed_password
     )
     db.add(db_user)
     db.commit()

@@ -23,10 +23,12 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
     created_date = Column(DateTime)
+    username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    password = Column(String)
+    firstname = Column(String)
+    lastname = Column(String)
     is_active = Column(Boolean, default=True)
 
     groups = relationship("Group", secondary='user_groups', back_populates="users")

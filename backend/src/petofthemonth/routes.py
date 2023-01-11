@@ -1,5 +1,16 @@
-from fastapi import APIRouter, Depends, Request, Response, HTTPException
+from datetime import timedelta
+
+from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from . import crud, schemas
+from .auth.users import validate_user
+from .auth.jwthandler import (
+    create_access_token,
+    get_current_user,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -10,6 +21,54 @@ def get_db(request: Request):
 @router.get("/")
 def read_root():
     return "Hello world"
+
+@router.post("/register", response_model=schemas.User)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db=db, user=user)
+
+@router.post("/login")
+async def login(user: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = validate_user(db=db, user=user)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    token = jsonable_encoder(access_token)
+    content = {"message": "You've successfully logged in."}
+    response = JSONResponse(content=content)
+    response.set_cookie(
+        "Authorization",
+        value=f"Bearer {token}",
+        httponly=True,
+        max_age=1800,
+        expires=1800,
+        samesite="Lax",
+        secure=False
+    )
+
+    return response
+
+@router.get("/users/whoami", response_model=schemas.UserRead, dependencies=[Depends(get_current_user)])
+async def read_users_me(current_user: schemas.UserRead = Depends(get_current_user)):
+    return current_user
+
+@router.delete(
+    "/user/{user_id}",
+    response_model=schemas.Status,
+    responses={404: {"msg": "Model not found"}},
+    dependencies=[Depends(get_current_user)]
+)
+async def delete_user(
+    user_id: int, current_user: schemas.UserRead = Depends(get_current_user), db: Session = Depends(get_db)
+) -> schemas.Status:
+    return await crud.delete_user(db, user_id=user_id)
 
 # Users
 @router.get("/users/", response_model=list[schemas.UserRead])
