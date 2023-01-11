@@ -6,17 +6,23 @@
 
       <form @submit.prevent="submit">
         <div class="mb-3">
-          <label for="name" class="form-label">Name:</label>
-          <input type="text" name="name" v-model="form.name" class="form-control" />
+          <label for="username" class="form-label">Username:</label>
+          <input type="text" name="username" v-model="form.username" class="form-control" />
 
-          <label for="description" class="form-label">Description:</label>
-          <input type="text" name="description" v-model="form.description" class="form-control" />
+          <label for="firstname" class="form-label">First Name:</label>
+          <input type="text" name="firstname" v-model="form.firstname" class="form-control" />
+
+          <label for="lastname" class="form-label">Last Name:</label>
+          <input type="text" name="lastname" v-model="form.lastname" class="form-control" />
 
           <label for="email" class="form-label">Email:</label>
           <input type="text" name="email" v-model="form.email" class="form-control" />
 
           <label for="password" class="form-label">Password:</label>
           <input type="text" name="password" v-model="form.password" class="form-control" />
+
+          <label for="description" class="form-label">Description:</label>
+          <input type="text" name="description" v-model="form.description" class="form-control" />
 
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -33,7 +39,7 @@
         <div class="card" style="width: 18rem;">
           <div class="card-body">
             <ul>
-              <li><strong>Username:</strong> {{ user.name }}</li>
+              <li><strong>Username:</strong> {{ user.username }}</li>
               <li><router-link :to="{name: 'User', params:{id: user.id}}">View</router-link></li>
             </ul>
           </div>
@@ -89,10 +95,12 @@ export default defineComponent({
     return {
       handleAge,
       form: {
-        name: "",
-        created_date: now,
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
         password: "",
+        created_date: now,
         description: ""
       },
     };

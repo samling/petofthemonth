@@ -4,6 +4,12 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+class Status(BaseModel):
+    message: str
+
 class PointBase(BaseModel):
     created_date: datetime
     description: Union[str, None] = None
@@ -24,9 +30,11 @@ class PetBase(BaseModel):
         orm_mode = True
 
 class UserBase(BaseModel):
-    name: str
-    created_date: datetime
+    username: str
+    firstname: str
+    lastname: str
     email: str
+    created_date: datetime
     description: Union[str, None] = None
 
     class Config:
