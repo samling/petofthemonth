@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import UsersView from '@/views/UsersView.vue'
+import UserView from '@/views/UserView.vue'
+import GroupsView from '@/views/GroupsView.vue'
+import GroupView from '@/views/GroupView.vue'
 import PetsView from '@/views/PetsView.vue'
 import PetView from '@/views/PetView.vue'
 
@@ -17,11 +21,30 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/users',
+      name: 'Users',
+      component: UsersView
+    },
+    {
+      path: '/user/:id',
+      name: 'User',
+      component: UserView,
+      props: true
+    },
+    {
+      path: '/groups',
+      name: 'Groups',
+      component: GroupsView
+    },
+    {
+      path: '/group/:id',
+      name: 'Group',
+      component: GroupView,
+      props: true
+    },
+    {
       path: '/pets',
       name: 'Pets',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: PetsView
     },
     {

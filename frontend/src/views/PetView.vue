@@ -6,6 +6,8 @@
       <p><strong>DOB:</strong> {{ pet.dob }}</p>
       <p><strong>Height:</strong> {{ pet.height }}</p>
       <p><strong>Weight:</strong> {{ pet.weight }}</p>
+      <p><strong>Owners:</strong> {{ pet.users }}</p>
+      <p><strong>Groups:</strong> {{ pet.groups }}</p>
       <p><strong>Points:</strong> {{ pet.points }}</p>
   
     <!-- <p><router-link :to="{name: 'EditPet', params:{id: note.id}}" class="btn btn-primary">Edit</router-link></p> -->
