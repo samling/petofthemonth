@@ -1,12 +1,10 @@
 from fastapi import HTTPException, Depends, status, Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.context import CryptContext
+from tortoise.exceptions import DoesNotExist
 
-from src.petofthemonth.models import User
-from src.petofthemonth.crud import get_user, get_user_by_username, get_user_by_email
-
-from sqlalchemy.orm import Session
-
+from src.database.models import Users
+from src.schemas.users import UserDatabaseSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,29 +16,23 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db: Session, username: str):
-    return get_user_by_username(db=db, username=username)
+async def get_user(username: str):
+    return await UserDatabaseSchema.from_queryset_single(Users.get(username=username))
 
 
-def validate_user(db: Session, user: OAuth2PasswordRequestForm = Depends()):
+async def validate_user(user: OAuth2PasswordRequestForm = Depends()):
     try:
-        db_user = get_user(db=db, username=user.username)
-    except AttributeError:
+        db_user = await get_user(user.username)
+    except DoesNotExist:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
 
-    if not hasattr(db_user, 'password'):
+    if not verify_password(user.password, db_user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password"
+            detail="Incorrect username or password",
         )
-    else:
-        if not verify_password(user.password, db_user.password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
-            )
 
     return db_user
