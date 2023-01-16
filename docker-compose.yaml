@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15.1
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=petofthemonth
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petofthemonth
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data/
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    expose:
+      - 80
+    ports:
+      - 80:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=samlingx@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=password
