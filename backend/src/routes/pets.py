@@ -6,7 +6,9 @@ from tortoise.exceptions import DoesNotExist
 
 import src.crud.pets as crud
 from src.auth.jwthandler import get_current_user
+from src.database.models import Points
 from src.schemas.pets import PetInSchema, PetOutSchema, UpdatePet
+from src.schemas.points import PointInSchema, PointOutSchema, UpdatePoint
 from src.schemas.token import Status
 from src.schemas.users import UserOutSchema
 
@@ -43,6 +45,14 @@ async def create_pet(
     pet: PetInSchema, current_user: UserOutSchema = Depends(get_current_user)
 ) -> PetOutSchema:
     return await crud.create_pet(pet, current_user)
+
+@router.post(
+    "/pets/{pet_id}/points/", response_model=PointOutSchema, dependencies=[Depends(get_current_user)]
+)
+async def create_pet_point(
+    pet_id: int, point: PointInSchema, current_user: UserOutSchema = Depends(get_current_user)
+) -> PointOutSchema:
+    return await crud.create_pet_point(pet_id, point, current_user)
 
 @router.patch(
     "/pet/{pet_id}",

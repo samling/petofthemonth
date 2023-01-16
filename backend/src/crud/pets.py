@@ -1,8 +1,9 @@
 from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist
 
-from src.database.models import Pets
+from src.database.models import Pets, Points
 from src.schemas.pets import PetOutSchema
+from src.schemas.points import PointOutSchema
 from src.schemas.token import Status
 
 async def get_pets():
@@ -15,6 +16,17 @@ async def create_pet(pet, current_user) -> PetOutSchema:
     pet_dict = pet.dict(exclude_unset=True)
     pet_obj = await Pets.create(**pet_dict)
     return await PetOutSchema.from_tortoise_orm(pet_obj)
+
+async def create_pet_point(pet_id, point, current_user) -> PointOutSchema:
+    try:
+        db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
+    except DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"Pet {pet_id} not found")
+
+    point_dict = point.dict(exclude_unset=True)
+    point_dict["pet_id"] = pet_id
+    point_obj = await Points.create(**point_dict)
+    return await PointOutSchema.from_tortoise_orm(point_obj)
 
 async def update_pet(pet_id, pet, current_user) -> PetOutSchema:
     try:

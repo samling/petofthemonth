@@ -1,8 +1,6 @@
 from typing import TypedDict
 from tortoise import fields, models
 
-# from .database import Base
-
 # user_groups = Table('user_groups', Base.metadata, \
 #     Column('user_id', ForeignKey('users.id'), primary_key=True), \
 #     Column('group_id', ForeignKey('groups.id'), primary_key=True)
@@ -28,7 +26,7 @@ class Users(models.Model):
     modified_at = fields.DatetimeField(auto_now=True)
     is_active   = fields.BooleanField(default=True)
 
-    # groups = relationship("Group", secondary='user_groups', back_populates="users")
+    groups: fields.ManyToManyRelation["Groups"] = fields.ManyToManyField("models.Groups", related_name="users", through="user_groups")
 
     # pets = relationship("Pet", secondary='user_pets', back_populates="users")
 
@@ -39,6 +37,9 @@ class Groups(models.Model):
     modified_at = fields.DatetimeField(auto_now=True)
     description = fields.TextField()
 
+    users       = fields.ManyToManyRelation[Users]
+
+    
     # users = relationship("User", secondary='user_groups', back_populates="groups")
 
     # pets = relationship("Pet", secondary='group_pets', back_populates="groups")
