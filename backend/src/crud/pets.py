@@ -12,7 +12,7 @@ async def get_pets():
     return await PetOutSchema.from_queryset(Pets.all().prefetch_related("users"))
 
 async def get_pet(pet_id) -> PetOutSchema:
-    return await PetOutSchema.from_queryset_single(Pets.get(id=pet_id).prefetch_related("users"))
+    return await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
 
 async def create_pet(pet, current_user) -> PetOutSchema:
     pet_dict = pet.dict(exclude_unset=True)

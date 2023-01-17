@@ -46,12 +46,18 @@ async def create_group(
     return await crud.create_group(group, current_user)
 
 @router.patch(
-    "/groups/{group_id}/pets/{pet_id}", response_model=GroupOutSchema, dependencies=[Depends(get_current_user)]
+    "/group/{group_id}/pets/{pet_id}",
+    dependencies=[Depends(get_current_user)],
+    response_model=GroupOutSchema,
+    responses={404: {"model": HTTPNotFoundError}}
 )
-async def add_group_pet(
-    group_id: int, group: UpdateGroup, pet_id: int, current_user: UserOutSchema = Depends(get_current_user)
-):
-    return await crud.add_group_pet(group_id, group, pet_id, current_user)
+async def update_group_pets(
+    group_id: int,
+    group: UpdateGroup,
+    pet_id: int,
+    current_user: UserOutSchema = Depends(get_current_user)
+) -> GroupOutSchema:
+    return await crud.update_group_pets(group_id, group, pet_id, current_user)
 
 @router.patch(
     "/group/{group_id}",
