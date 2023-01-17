@@ -22,11 +22,13 @@ async def update_group_pets(group_id, group, pet_id, current_user) -> GroupOutSc
         db_group = await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
         db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
     except DoesNotExist:
-        raise HTTPException(status_code=404, detail=f"Group {group_id} not found")
+        raise HTTPException(status_code=404, detail=f"Group {group_id} or pet {pet_id} not found")
     
     #TODO: Check that the current user is in owner list
     group_obj = await Groups.filter(id=group_id).first().prefetch_related("pets")
     pet_obj = await Pets.filter(id=pet_id).first()
+    if pet_obj in group_obj.pets:
+        print("exists")
     await group_obj.pets.add(pet_obj)
 
     return await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
