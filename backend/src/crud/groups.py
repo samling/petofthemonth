@@ -1,12 +1,13 @@
 from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist
 
-from src.database.models import Groups
+from src.database.models import Groups, Pets
 from src.schemas.groups import GroupOutSchema
+from src.schemas.pets import PetOutSchema
 from src.schemas.token import Status
 
 async def get_groups():
-    return await GroupOutSchema.from_queryset(Groups.all())
+    return await GroupOutSchema.from_queryset(Groups.all().prefetch_related("users"))
 
 async def get_group(group_id) -> GroupOutSchema:
     return await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
@@ -15,6 +16,18 @@ async def create_group(group, current_user) -> GroupOutSchema:
     group_dict = group.dict(exclude_unset=True)
     group_obj = await Groups.create(**group_dict)
     return await GroupOutSchema.from_tortoise_orm(group_obj)
+
+async def add_group_pet(group_id, group, pet_id, current_user) -> GroupOutSchema:
+    try:
+        db_group = await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
+        db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
+    except DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"Group {group_id} not found")
+
+    #TODO: ???
+    await Groups.filter(id=group_id).update(**group.dict(exclude_unset=True))
+
+    return await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
 
 async def update_group(group_id, group, current_user) -> GroupOutSchema:
     try:

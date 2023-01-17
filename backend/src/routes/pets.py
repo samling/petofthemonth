@@ -47,7 +47,7 @@ async def create_pet(
     return await crud.create_pet(pet, current_user)
 
 @router.post(
-    "/pets/{pet_id}/points/", response_model=PointOutSchema, dependencies=[Depends(get_current_user)]
+    "/pets/{pet_id}/points", response_model=PointOutSchema, dependencies=[Depends(get_current_user)]
 )
 async def create_pet_point(
     pet_id: int, point: PointInSchema, current_user: UserOutSchema = Depends(get_current_user)

@@ -1,5 +1,8 @@
+from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from src.database.models import Users
+
+Tortoise.init_models(["src.database.models"], "models")
 
 UserInSchema = pydantic_model_creator(
     Users, name="UserIn", exclude_readonly=True

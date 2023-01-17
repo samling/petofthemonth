@@ -43,6 +43,18 @@ CREATE TABLE IF NOT EXISTS "aerich" (
     "version" VARCHAR(255) NOT NULL,
     "app" VARCHAR(100) NOT NULL,
     "content" JSONB NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "group_pets" (
+    "groups_id" INT NOT NULL REFERENCES "groups" ("id") ON DELETE CASCADE,
+    "pets_id" INT NOT NULL REFERENCES "pets" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "user_pets" (
+    "users_id" INT NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE,
+    "pets_id" INT NOT NULL REFERENCES "pets" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "user_groups" (
+    "users_id" INT NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE,
+    "groups_id" INT NOT NULL REFERENCES "groups" ("id") ON DELETE CASCADE
 );"""
 
 
