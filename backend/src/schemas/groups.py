@@ -13,7 +13,13 @@ GroupInSchema = pydantic_model_creator(
 )
 
 GroupOutSchema = pydantic_model_creator(
-    Groups, name="GroupOut", exclude=["created_at", "modified_at"]
+    Groups, name="GroupOut", exclude=[
+        "created_at",
+        "modified_at",
+        "users.created_at",
+        "users.modified_at",
+        "users.password",
+    ]
 )
 
 class UpdateGroup(BaseModel):

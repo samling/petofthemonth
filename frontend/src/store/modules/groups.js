@@ -22,16 +22,16 @@ const actions = {
     },
 
     async viewGroup({commit}, id) {
-        let {data} = await axios.get(`groups/${id}`)
+        let {data} = await axios.get(`group/${id}`)
         commit('setGroup', data)
     },
 
     async updateGroup({}, group) {
-        await axios.patch(`groups/${group.id}`, group.form)
+        await axios.patch(`group/${group.id}`, group.form)
     },
 
     async deleteGroup({}, id) {
-        await axios.delete(`groups/${id}`)
+        await axios.delete(`group/${id}`)
     }
 }
 

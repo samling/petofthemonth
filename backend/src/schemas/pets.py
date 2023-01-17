@@ -13,7 +13,14 @@ PetInSchema = pydantic_model_creator(
 )
 
 PetOutSchema = pydantic_model_creator(
-    Pets, name="PetOut", exclude=["created_at", "modified_at"]
+    Pets, name="PetOut", exclude=[
+        "created_at",
+        "modified_at",
+        "users.created_at",
+        "users.modified_at",
+        "users.password",
+        "groups.users"
+    ]
 )
 
 class UpdatePet(BaseModel):
