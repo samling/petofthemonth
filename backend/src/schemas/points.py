@@ -5,8 +5,6 @@ from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from src.database.models import Points
 
-Tortoise.init_models(["src.database.models"], "models")
-
 PointInSchema = pydantic_model_creator(
     Points, name="PointIn", exclude=["pet_id"], exclude_readonly=True
 )
