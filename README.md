@@ -1,6 +1,7 @@
 ## Requirements
-- python > 3.9
+- python > 3.11
 - pyenv (Optional)
+- nvm (Optional)
 - Docker (Optional)
 
 ## Setup
