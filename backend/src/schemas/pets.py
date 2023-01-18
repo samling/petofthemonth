@@ -6,8 +6,6 @@ from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
 from src.database.models import Pets
 
-Tortoise.init_models(["src.database.models"], "models")
-
 PetInSchema = pydantic_model_creator(
     Pets, name="PetIn", exclude_readonly=True
 )
