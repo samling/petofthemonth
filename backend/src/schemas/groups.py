@@ -17,6 +17,7 @@ GroupOutSchema = pydantic_model_creator(
         "users.created_at",
         "users.modified_at",
         "users.password",
+        "pets.users.password"
     ]
 )
 

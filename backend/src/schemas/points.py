@@ -15,7 +15,7 @@ PointOutSchema = pydantic_model_creator(
         "pet.created_at",
         "pet.modified_at",
         "pet.groups",
-        "pet.users",
+        "pet.users.password",
     ]
 )
 
