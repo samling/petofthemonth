@@ -22,16 +22,16 @@ const actions = {
     },
 
     async viewPoint({commit}, id) {
-        let {data} = await axios.get(`points/${id}`)
+        let {data} = await axios.get(`point/${id}`)
         commit('setPoint', data)
     },
 
     async updatePoint({}, point) {
-        await axios.patch(`points/${point.id}`, point.form)
+        await axios.patch(`point/${point.id}`, point.form)
     },
 
     async deletePoint({}, id) {
-        await axios.delete(`points/${id}`)
+        await axios.delete(`point/${id}`)
     }
 }
 

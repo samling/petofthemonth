@@ -7,10 +7,11 @@ from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
 from jose import JWTError, jwt
+from tortoise.exceptions import DoesNotExist
 
-from src.petofthemonth.schemas import TokenData, UserRead
-from src.petofthemonth.models import User
-from src.petofthemonth.crud import get_user_by_username
+from src.schemas.token import TokenData
+from src.schemas.users import UserOutSchema
+from src.database.models import Users
 
 
 # TODO: Read this from environment vars
@@ -84,8 +85,10 @@ async def get_current_user(token: str = Depends(security)):
         raise credentials_exception
 
     try:
-        user = await get_user_by_username(username=token_data.username)
-    except:
+        user = await UserOutSchema.from_queryset_single(
+            Users.get(username=token_data.username)
+        )
+    except DoesNotExist:
         raise credentials_exception
 
     return user

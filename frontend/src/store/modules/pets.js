@@ -22,16 +22,16 @@ const actions = {
     },
 
     async viewPet({commit}, id) {
-        let {data} = await axios.get(`pets/${id}`)
+        let {data} = await axios.get(`pet/${id}`)
         commit('setPet', data)
     },
 
     async updatePet({}, pet) {
-        await axios.patch(`pets/${pet.id}`, pet.form)
+        await axios.patch(`pet/${pet.id}`, pet.form)
     },
 
     async deletePet({}, id) {
-        await axios.delete(`pets/${id}`)
+        await axios.delete(`pet/${id}`)
     }
 }
 

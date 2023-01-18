@@ -22,16 +22,16 @@ const actions = {
     },
 
     async viewUser({commit}, id) {
-        let {data} = await axios.get(`users/${id}`)
+        let {data} = await axios.get(`user/${id}`)
         commit('setUser', data)
     },
 
     async updateUser({}, user) {
-        await axios.patch(`users/${user.id}`, user.form)
+        await axios.patch(`user/${user.id}`, user.form)
     },
 
     async deleteUser({}, id) {
-        await axios.delete(`users/${id}`)
+        await axios.delete(`user/${id}`)
     }
 }
 

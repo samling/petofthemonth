@@ -1,6 +1,8 @@
+aerich
+asyncpg
 fastapi
 passlib
 python-jose
 python-multipart
-sqlalchemy
+tortoise-orm
 uvicorn[standard]
