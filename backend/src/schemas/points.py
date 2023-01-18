@@ -15,7 +15,9 @@ PointOutSchema = pydantic_model_creator(
     Points, name="PointOut", exclude=[
         "modified_at",
         "pet.created_at",
-        "pet.modified_at"
+        "pet.modified_at",
+        "pet.groups",
+        "pet.users",
     ]
 )
 

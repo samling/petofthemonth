@@ -12,9 +12,22 @@ from src.schemas.users import UserOutSchema
 
 router = APIRouter()
 
+# exclude_user_password_pattern = {
+#         "pet": {
+#             "groups": {
+#                 "__all__": {
+#                     "users": {
+#                         "__all__": {"password"}
+#                     }
+#                 }
+#             }
+#         }
+#     }
+
 @router.get(
     "/points",
     response_model=List[PointOutSchema],
+    # response_model_exclude=exclude_user_password_pattern,
     dependencies=[Depends(get_current_user)]
 )
 async def get_points():
@@ -23,6 +36,7 @@ async def get_points():
 @router.get(
     "/point/{point_id}",
     response_model=PointOutSchema,
+    # response_model_exclude=exclude_user_password_pattern,
     dependencies=[Depends(get_current_user)]
 )
 async def get_point(
@@ -37,7 +51,10 @@ async def get_point(
         )
 
 @router.post(
-    "/points", response_model=PointOutSchema, dependencies=[Depends(get_current_user)]
+    "/points",
+    response_model=PointOutSchema,
+    # response_model_exclude=exclude_user_password_pattern,
+    dependencies=[Depends(get_current_user)]
 )
 async def create_point(
     point: PointInSchema, current_user: UserOutSchema = Depends(get_current_user)
@@ -48,6 +65,7 @@ async def create_point(
     "/point/{point_id}",
     dependencies=[Depends(get_current_user)],
     response_model=PointOutSchema,
+    # response_model_exclude=exclude_user_password_pattern,
     responses={404: {"model": HTTPNotFoundError}}
 )
 async def update_point(
@@ -60,6 +78,7 @@ async def update_point(
 @router.delete(
     "/point/{point_id}",
     response_model=Status,
+    # response_model_exclude=exclude_user_password_pattern,
     responses={404: {"model": HTTPNotFoundError}},
     dependencies=[Depends(get_current_user)]
 )

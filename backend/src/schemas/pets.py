@@ -16,10 +16,9 @@ PetOutSchema = pydantic_model_creator(
     Pets, name="PetOut", exclude=[
         "created_at",
         "modified_at",
-        "users.created_at",
-        "users.modified_at",
+        "groups.users",
         "users.password",
-        "groups.users"
+        # TODO: Why does adding "users.groups" invalidate "users.password"?
     ]
 )
 

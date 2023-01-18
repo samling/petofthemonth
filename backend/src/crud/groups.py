@@ -44,7 +44,7 @@ async def update_group_users(request, group_id, user_id, current_user) -> GroupO
 
     raise HTTPException(status_code=403, detail=f"Not authorized")
 
-async def update_group_pets(request, group_id, pet_id, current_user) -> GroupOutSchema:
+async def update_group_pets(request, group_id, group, pet_id, current_user) -> GroupOutSchema:
     try:
         db_group = await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
         db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
@@ -61,6 +61,7 @@ async def update_group_pets(request, group_id, pet_id, current_user) -> GroupOut
         #     print("exists")
         await group_obj.pets.remove(pet_obj)
 
+    await Groups.filter(id=group_id).update(**group.dict(exclude_unset=True))
     return await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
 
     #TODO: Return exception if not in owner list
