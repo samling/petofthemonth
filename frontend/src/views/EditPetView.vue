@@ -32,6 +32,12 @@
           <label for="weight" class="form-label">Weight:</label>
           <input type="text" name="weight" v-model="form.weight" class="form-control" />
         </div>
+        <div class="mb-3">
+          <label for="users" class="form-label">Users:</label>
+          <multiselect name="users" v-model="form.users" :options="users" :multiple="true" track-by="username" label="username">
+            <template slot="selection" slot-scope="{ petUsers }"><strong>{{ petUsers.username }}</strong></template>
+          </multiselect>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </section>
@@ -41,6 +47,7 @@
   import { defineComponent, ref } from 'vue';
   import { mapGetters, mapActions } from 'vuex';
 
+  import Multiselect from 'vue-multiselect'
   import Datepicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
   import moment from 'moment'
@@ -50,7 +57,7 @@
   
   export default defineComponent({
     name: 'EditPet',
-    components: { Datepicker },
+    components: { Datepicker, Multiselect },
     props: ['id'],
     setup() {
         const date = ref(new Date())
@@ -79,6 +86,7 @@
 
         return {
             handleAge,
+            petUsers: [this.$store.state.users],
             form: {
                 name: '',
                 created_date: now,
@@ -86,7 +94,8 @@
                 dob: '',
                 height: '',
                 weight: '',
-                description: ''
+                description: '',
+                users: []
             },
         };
     },
@@ -94,21 +103,22 @@
       this.GetPet();
     },
     computed: {
-      ...mapGetters({ pet: 'statePet' }),
+      ...mapGetters({ pet: 'statePet', users: 'stateUsers' }),
     },
     methods: {
-      ...mapActions(['updatePet', 'viewPet']),
+      ...mapActions(['updatePet', 'updatePetUser', 'viewPet']),
       async submit() {
-      try {
-        let pet = {
-          id: this.id,
-          form: this.form,
-        };
-        await this.updatePet(pet);
-        this.$router.push({name: 'Pet', params:{id: this.pet.id}});
-      } catch (error) {
-        console.log(error);
-      }
+        try {
+          let pet = {
+            id: this.id,
+            form: this.form,
+            userid: this.form.users.id
+          };
+          await this.updatePetUser(pet, this.pet.userid);
+          this.$router.push({name: 'Pet', params:{id: this.pet.id}});
+        } catch (error) {
+          console.log(error);
+        }
       },
       async GetPet() {
         try {
@@ -119,6 +129,7 @@
           this.form.dob = this.pet.dob;
           this.form.height = this.pet.height;
           this.form.weight = this.pet.weight;
+          this.form.users = this.pet.users;
         } catch (error) {
           console.error(error);
           this.$router.push('/dashboard');
@@ -127,3 +138,5 @@
     },
   });
   </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

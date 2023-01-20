@@ -9,8 +9,7 @@ from src.schemas.users import UserOutSchema
 from src.schemas.token import Status
 
 async def get_pets():
-    print(PetOutSchema.schema_json(indent=4))
-    return await PetOutSchema.from_queryset(Pets.all())
+    return await PetOutSchema.from_queryset(Pets.all().prefetch_related("users"))
 
 async def get_pet(pet_id) -> PetOutSchema:
     return await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
@@ -40,9 +39,10 @@ async def update_pet_users(request, pet_id, pet, user_id, current_user) -> PetOu
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Pet {pet_id} or user {user_id} not found")
     
-    pet_obj = await Pets.filter(id=pet_id).first()
-    user_obj = await Users.filter(id=current_user.id).first()
-    if user_obj in pet_obj.users:
+    pet_obj = await Pets.filter(id=pet_id).first().prefetch_related("users")
+    user_obj = await Users.filter(id=user_id).first()
+    curr_user_obj = await Users.filter(id=current_user.id).first()
+    if curr_user_obj in pet_obj.users:
         if request.method == 'PATCH':
             await pet_obj.users.add(user_obj)
         elif request.method == 'DELETE':

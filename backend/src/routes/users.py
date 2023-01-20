@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
@@ -53,6 +54,14 @@ async def login(user: OAuth2PasswordRequestForm = Depends()):
     )
 
     return response
+
+@router.get(
+    "/users/",
+    response_model=List[UserOutSchema],
+    dependencies=[Depends(get_current_user)]
+)
+async def get_users():
+    return await crud.get_users()
 
 @router.get(
     "/users/whoami", response_model=UserOutSchema, dependencies=[Depends(get_current_user)]
