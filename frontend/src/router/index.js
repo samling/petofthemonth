@@ -95,7 +95,6 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log(store.getters.isAuthenticated)
     if (store.getters.isAuthenticated) {
       next();
       return;

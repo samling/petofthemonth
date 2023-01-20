@@ -82,8 +82,8 @@
             form: {
                 name: '',
                 created_date: now,
-                age: '',
-                dob: this.date,
+                age: age,
+                dob: '',
                 height: '',
                 weight: '',
                 description: ''
@@ -97,7 +97,7 @@
       ...mapGetters({ pet: 'statePet' }),
     },
     methods: {
-      ...mapActions(['updateNote', 'viewPet']),
+      ...mapActions(['updatePet', 'viewPet']),
       async submit() {
       try {
         let pet = {
