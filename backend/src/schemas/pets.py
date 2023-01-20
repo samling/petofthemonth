@@ -16,7 +16,8 @@ PetOutSchema = pydantic_model_creator(
         "modified_at",
         "groups.users",
         "users.password",
-        # TODO: Why does adding "users.groups" invalidate "users.password"?
+        "users.groups"
+        # TODO: Why does adding "users.groups" invalidate "users.password" when prefetch_related() is used?
     ]
 )
 

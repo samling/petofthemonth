@@ -8,7 +8,7 @@ from src.schemas.users import UserOutSchema
 from src.schemas.token import Status
 
 async def get_groups():
-    return await GroupOutSchema.from_queryset(Groups.all().prefetch_related("users"))
+    return await GroupOutSchema.from_queryset(Groups.all())
 
 async def get_group(group_id) -> GroupOutSchema:
     return await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
@@ -29,7 +29,7 @@ async def update_group_users(request, group_id, user_id, current_user) -> GroupO
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Group {group_id} or user {user_id} not found")
     
-    group_obj = await Groups.filter(id=group_id).first().prefetch_related("users")
+    group_obj = await Groups.filter(id=group_id).first()
     user_obj = await Users.filter(id=current_user.id).first()
     if user_obj in group_obj.users:
         if request.method == 'PATCH':
@@ -52,7 +52,7 @@ async def update_group_pets(request, group_id, group, pet_id, current_user) -> G
         raise HTTPException(status_code=404, detail=f"Group {group_id} or pet {pet_id} not found")
     
     #TODO: Check that the current user is in owner list
-    group_obj = await Groups.filter(id=group_id).first().prefetch_related("pets")
+    group_obj = await Groups.filter(id=group_id).first()
     pet_obj = await Pets.filter(id=pet_id).first()
     if request.method == 'PATCH':
         await group_obj.pets.add(pet_obj)

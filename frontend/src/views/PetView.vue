@@ -10,8 +10,7 @@
       <p><strong>Groups:</strong> {{ pet.groups }}</p>
       <p><strong>Points:</strong> {{ pet.points }}</p>
   
-    <!-- <p><router-link :to="{name: 'EditPet', params:{id: note.id}}" class="btn btn-primary">Edit</router-link></p> -->
-    <p><router-link :to="{params:{id: pet.id}}" class="btn btn-primary">Edit</router-link></p>
+    <p><router-link :to="{name: 'EditPet', params:{id: pet.id}}" class="btn btn-primary">Edit</router-link></p>
     <p><button @click="removePet()" class="btn btn-secondary">Delete</button></p>
     </div>
   </template>
