@@ -32,21 +32,6 @@
           <label for="weight" class="form-label">Weight:</label>
           <input type="text" name="weight" v-model="form.weight" class="form-control" />
         </div>
-        <div class="mb-3">
-          <label for="users" class="form-label">Users:</label>
-          <multiselect
-             name="users"
-             v-model="form.users"
-             :options="petUsers"
-             :custom-label="petUser"
-             :multiple="true"
-             track-by="username"
-             label="username"
-             @select="addToPetUserList"
-             @remove="removeFromPetUserList">
-          </multiselect>
-          {{ form.users }}
-        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </section>
@@ -96,8 +81,6 @@
 
         return {
             handleAge,
-            addPetUserList: [],
-            removePetUserList: [],
             petUsers: [this.$store.state.users],
             form: {
                 name: '',
@@ -107,35 +90,17 @@
                 height: '',
                 weight: '',
                 description: '',
-                users: []
             },
         };
     },
     created: function() {
-      this.GetUsers()
       this.GetPet();
     },
     computed: {
-      ...mapGetters({ pet: 'statePet', users: 'stateUsers' }),
-      formPetUserList: function() {
-        var petUserList = []
-        this.form.users.filter(function(petUser) {
-          petUserList.push(petUser.id)
-        })
-        return petUserList
-      }
+      ...mapGetters({ pet: 'statePet'}),
     },
     methods: {
-      ...mapActions(['updatePet', 'addPetUser', 'removePetUser', 'viewPet', 'getUsers']),
-      addToPetUserList(object) {
-        console.log("User added")
-        this.addPetUserList.push(object)
-      },
-      removeFromPetUserList(object) {
-        console.log("User removed")
-        this.removePetUserList.push(object)
-        console.log(this.removePetUserList)
-      },
+      ...mapActions(['updatePet', 'viewPet']),
       async GetPet() {
         try {
           await this.viewPet(this.id);
@@ -145,43 +110,19 @@
           this.form.dob = this.pet.dob;
           this.form.height = this.pet.height;
           this.form.weight = this.pet.weight;
-          this.form.users = this.pet.users;
         } catch (error) {
           console.error(error);
           this.$router.push('/dashboard');
         }
       },
-      async GetUsers() {
-        axios
-          .get('users')
-          .then(response => {
-            this.petUsers = response.data;
-          })
-      },
-      petUser(option) {
-        return `${option.username}`
-      },
-      async submit() {
+     async submit() {
         try {
-          // let currPetUsers = this.$store.state.pets.pet.users
-          // console.log(this.form.users)
-          // for (var i = 0; i < this.formPetUserList.length; i++) {
-          //   let user_id = this.formPetUserList[i]
-          //   let pet = {
-          //     id: this.id,
-          //     form: this.form,
-          //     user_id: user_id
-          //   }
-          //   console.log(currPetUsers.includes(user_id))
-          // }
           let pet = {
-            id: 3,
-            form: {},
-            user_id: 4
+            id: this.id,
+            form: this.form,
           }
           console.log(this.addPetUserList)
-          // await this.removePetUser(pet);
-          await this.addPetUser(pet);
+          await this.updatePet(pet);
           this.$router.push({name: 'Pet', params:{id: this.pet.id}});
         } catch (error) {
           console.log(error);
