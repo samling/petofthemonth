@@ -32,7 +32,7 @@ async def create_pet_point(pet_id, point, current_user) -> PointOutSchema:
     point_obj = await Points.create(**point_dict, pet_id=pet_id)
     return await PointOutSchema.from_tortoise_orm(point_obj)
 
-async def update_pet_users(request, pet_id, pet, user_id, current_user) -> PetOutSchema:
+async def update_pet_users(request, pet_id, user_id, current_user) -> PetOutSchema:
     try:
         db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
         db_user = await UserOutSchema.from_queryset_single(Users.get(id=user_id))
@@ -62,6 +62,7 @@ async def update_pet(pet_id, pet, current_user) -> PetOutSchema:
         raise HTTPException(status_code=404, detail=f"Pet {pet_id} not found")
     
     #TODO: Check that the current user is in owner list
+    print(pet)
     await Pets.filter(id=pet_id).update(**pet.dict(exclude_unset=True))
     return await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
 

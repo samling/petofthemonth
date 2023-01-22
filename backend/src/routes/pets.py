@@ -87,11 +87,10 @@ async def create_pet_point(
 async def update_pet_users(
     request: Request,
     pet_id: int,
-    pet: UpdatePet,
     user_id: int,
     current_user: UserOutSchema = Depends(get_current_user)
 ) -> PetOutSchema:
-    return await crud.update_pet_users(request, pet_id, pet, user_id, current_user)
+    return await crud.update_pet_users(request, pet_id, user_id, current_user)
 
 @router.patch(
     "/pet/{pet_id}",

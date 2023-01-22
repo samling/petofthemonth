@@ -30,6 +30,7 @@ const actions = {
   async getUsers({commit}) {
     let {data} = await axios.get('users')
     commit('setUsers', data)
+    return data
   },
   // eslint-disable-next-line no-empty-pattern
   async deleteUser({}, id) {

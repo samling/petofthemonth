@@ -34,9 +34,18 @@
         </div>
         <div class="mb-3">
           <label for="users" class="form-label">Users:</label>
-          <multiselect name="users" v-model="form.users" :options="users" :multiple="true" track-by="username" label="username">
-            <template slot="selection" slot-scope="{ petUsers }"><strong>{{ petUsers.username }}</strong></template>
+          <multiselect
+             name="users"
+             v-model="form.users"
+             :options="petUsers"
+             :custom-label="petUser"
+             :multiple="true"
+             track-by="username"
+             label="username"
+             @select="addToPetUserList"
+             @remove="removeFromPetUserList">
           </multiselect>
+          {{ form.users }}
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
@@ -51,6 +60,7 @@
   import Datepicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
   import moment from 'moment'
+  import axios from 'axios';
   moment.locale('en')
 
   var now = new Date(Date.now())
@@ -86,6 +96,8 @@
 
         return {
             handleAge,
+            addPetUserList: [],
+            removePetUserList: [],
             petUsers: [this.$store.state.users],
             form: {
                 name: '',
@@ -100,25 +112,29 @@
         };
     },
     created: function() {
+      this.GetUsers()
       this.GetPet();
     },
     computed: {
       ...mapGetters({ pet: 'statePet', users: 'stateUsers' }),
+      formPetUserList: function() {
+        var petUserList = []
+        this.form.users.filter(function(petUser) {
+          petUserList.push(petUser.id)
+        })
+        return petUserList
+      }
     },
     methods: {
-      ...mapActions(['updatePet', 'updatePetUser', 'viewPet']),
-      async submit() {
-        try {
-          let pet = {
-            id: this.id,
-            form: this.form,
-            userid: this.form.users.id
-          };
-          await this.updatePetUser(pet, this.pet.userid);
-          this.$router.push({name: 'Pet', params:{id: this.pet.id}});
-        } catch (error) {
-          console.log(error);
-        }
+      ...mapActions(['updatePet', 'addPetUser', 'removePetUser', 'viewPet', 'getUsers']),
+      addToPetUserList(object) {
+        console.log("User added")
+        this.addPetUserList.push(object)
+      },
+      removeFromPetUserList(object) {
+        console.log("User removed")
+        this.removePetUserList.push(object)
+        console.log(this.removePetUserList)
       },
       async GetPet() {
         try {
@@ -134,7 +150,43 @@
           console.error(error);
           this.$router.push('/dashboard');
         }
-      }
+      },
+      async GetUsers() {
+        axios
+          .get('users')
+          .then(response => {
+            this.petUsers = response.data;
+          })
+      },
+      petUser(option) {
+        return `${option.username}`
+      },
+      async submit() {
+        try {
+          // let currPetUsers = this.$store.state.pets.pet.users
+          // console.log(this.form.users)
+          // for (var i = 0; i < this.formPetUserList.length; i++) {
+          //   let user_id = this.formPetUserList[i]
+          //   let pet = {
+          //     id: this.id,
+          //     form: this.form,
+          //     user_id: user_id
+          //   }
+          //   console.log(currPetUsers.includes(user_id))
+          // }
+          let pet = {
+            id: 3,
+            form: {},
+            user_id: 4
+          }
+          console.log(this.addPetUserList)
+          // await this.removePetUser(pet);
+          await this.addPetUser(pet);
+          this.$router.push({name: 'Pet', params:{id: this.pet.id}});
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
   });
   </script>

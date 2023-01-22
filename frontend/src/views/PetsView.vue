@@ -36,7 +36,7 @@
       <hr/><br/>
 
       <div v-for="pet in pets" :key="pet.id" class="pets">
-        <div class="card" style="width: 18rem;">
+        <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(pet.users[0].id)" style="width: 18rem;">
           <div class="card-body">
             <ul>
               <li><strong>Pet Name:</strong> {{ pet.name }}</li>
@@ -96,7 +96,6 @@ export default defineComponent({
       handleAge,
       form: {
         name: "",
-        created_date: now,
         age: age,
         dob: this.date,
         height: "",

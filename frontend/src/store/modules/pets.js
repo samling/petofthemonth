@@ -30,8 +30,12 @@ const actions = {
         await axios.patch(`pet/${pet.id}`, pet.form)
     },
 
-    async updatePetUser({}, pet) {
-        await axios.patch(`pets/${pet.id}/users/${pet.userid}`, pet.form)
+    async addPetUser({}, pet) {
+        await axios.patch(`pets/${pet.id}/users/${pet.user_id}`, pet.form)
+    },
+
+    async removePetUser({}, pet) {
+        await axios.delete(`pets/${pet.id}/users/${pet.user_id}`, pet.form)
     },
 
     async deletePet({}, id) {
