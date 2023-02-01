@@ -77,8 +77,6 @@
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let user_id = response.data[i].id
-              console.log(user_id)
-              console.log(petUsers)
 
               if (!new Set(petUsers).has(user_id)) {
                 availableUserList.push(response.data[i])

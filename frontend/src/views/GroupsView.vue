@@ -24,6 +24,8 @@
       <hr/><br/>
 
       <div v-for="group in groups" :key="group.id" class="groups">
+        <!-- <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(group.users[0].id)" style="width: 18rem;"> -->
+        {{ group.users[0] }}
         <div class="card" style="width: 18rem;">
           <div class="card-body">
             <ul>

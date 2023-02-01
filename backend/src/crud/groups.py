@@ -29,9 +29,10 @@ async def update_group_users(request, group_id, user_id, current_user) -> GroupO
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Group {group_id} or user {user_id} not found")
     
-    group_obj = await Groups.filter(id=group_id).first()
-    user_obj = await Users.filter(id=current_user.id).first()
-    if user_obj in group_obj.users:
+    group_obj = await Groups.filter(id=group_id).first().prefetch_related("users")
+    user_obj = await Users.filter(id=user_id).first()
+    curr_user_obj = await Users.filter(id=current_user.id).first()
+    if curr_user_obj in group_obj.users:
         if request.method == 'PATCH':
             await group_obj.users.add(user_obj)
         elif request.method == 'DELETE':
@@ -44,7 +45,7 @@ async def update_group_users(request, group_id, user_id, current_user) -> GroupO
 
     raise HTTPException(status_code=403, detail=f"Not authorized")
 
-async def update_group_pets(request, group_id, group, pet_id, current_user) -> GroupOutSchema:
+async def update_group_pets(request, group_id, pet_id, current_user) -> GroupOutSchema:
     try:
         db_group = await GroupOutSchema.from_queryset_single(Groups.get(id=group_id))
         db_pet = await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
