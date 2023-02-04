@@ -8,6 +8,7 @@ import UsersView from '@/views/UsersView.vue'
 import UserView from '@/views/UserView.vue'
 import GroupsView from '@/views/GroupsView.vue'
 import GroupView from '@/views/GroupView.vue'
+import EditGroupView from '@/views/EditGroupView.vue'
 import PetsView from '@/views/PetsView.vue'
 import PetView from '@/views/PetView.vue'
 import EditPetView from '@/views/EditPetView.vue'
@@ -68,6 +69,13 @@ const router = createRouter({
       path: '/group/:id',
       name: 'Group',
       component: GroupView,
+      props: true
+    },
+    {
+      path: '/editgroup/:id',
+      name: 'EditGroup',
+      component: EditGroupView,
+      meta: { requiresAuth: true },
       props: true
     },
     {

@@ -46,7 +46,6 @@ const actions = {
         await axios.delete(`group/${group.id}/pets/${group.pet_id}`, group.form)
     },
 
-
     async deleteGroup({}, id) {
         await axios.delete(`group/${id}`)
     }

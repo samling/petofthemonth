@@ -7,7 +7,7 @@
       <p><strong>Height:</strong> {{ pet.height }}</p>
       <p><strong>Weight:</strong> {{ pet.weight }}</p>
       <p><strong>Owners:</strong> <p v-for='petUser in pet.users'>
-        {{ petUser.username }}<button type="button" @click="removePetUserByList(petUser.id)">X</button>
+        <router-link :to="{name: 'User', params:{id: petUser.id}}">{{ petUser.username }}</router-link><button type="button" v-if="petUser.id == this.$store.state.users.user.id" @click="removePetUserByList(petUser.id)">X</button>
       </p>
       <span><button @click="editPetUsersToggle()"><span v-if="!editPetUserState">Add Owner</span><span v-else>Close</span></button></span></p>
       <p v-if="editPetUserState"><strong>Add owner:</strong></p>
@@ -27,7 +27,9 @@
       </form>
       </p>
       <p v-else></p>
-      <p><strong>Groups:</strong> {{ pet.groups }}</p>
+      <p><strong>Groups:</strong> <p v-for='petGroup in pet.groups'>
+        <router-link :to="{name: 'Group', params:{id: petGroup.id}}">{{ petGroup.name }}</router-link>
+      </p></p>
       <p><strong>Points:</strong> {{ pet.points }}</p>
   
     <p><router-link :to="{name: 'EditPet', params:{id: pet.id}}" class="btn btn-primary">Edit</router-link></p>

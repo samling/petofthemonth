@@ -4,7 +4,7 @@
       <p><strong>Description:</strong> {{ group.description }}</p>
       <p><strong>Members:</strong>
         <p v-for='groupUser in group.users'>
-          {{ groupUser.username }}<button type="button" @click="removeGroupUserByList(groupUser.id)">X</button>
+          <router-link :to="{name: 'User', params:{id: groupUser.id}}">{{ groupUser.username }}</router-link><button type="button" @click="removeGroupUserByList(groupUser.id)">X</button>
         </p>
       <span><button @click="editGroupUsersToggle()"><span v-if="!editGroupUserState">Add Member</span><span v-else>Close</span></button></span></p>
       <p v-if="editGroupUserState"><strong>Add member:</strong></p>
@@ -26,7 +26,7 @@
       <p v-else></p>
       <p><strong>Pets:</strong>
         <p v-for='groupPet in group.pets'>
-          {{ groupPet.name }}<button type="button" @click="removeGroupPetByList(groupPet.id)">X</button>
+          <router-link :to="{name: 'Pet', params:{id: groupPet.id}}">{{ groupPet.name }}</router-link><button type="button" @click="removeGroupPetByList(groupPet.id)">X</button>
         </p>
       <span><button @click="editGroupPetsToggle()"><span v-if="!editGroupPetState">Add Pet</span><span v-else>Close</span></button></span></p>
       <p v-if="editGroupPetState"><strong>Add pet:</strong></p>
@@ -47,8 +47,7 @@
       </p>
       <p v-else></p>
   
-    <!-- <p><router-link :to="{name: 'EditPet', params:{id: note.id}}" class="btn btn-primary">Edit</router-link></p> -->
-    <p><router-link :to="{params:{id: group.id}}" class="btn btn-primary">Edit</router-link></p>
+    <p><router-link :to="{name: 'EditGroup', params:{id: group.id}}" class="btn btn-primary">Edit</router-link></p>
     <p><button @click="removeGroup()" class="btn btn-secondary">Delete</button></p>
     </div>
   </template>
