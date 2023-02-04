@@ -41,16 +41,18 @@
   import { defineComponent, ref } from 'vue';
   import { mapGetters, mapActions } from 'vuex';
 
+  import Multiselect from 'vue-multiselect'
   import Datepicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
   import moment from 'moment'
+  import axios from 'axios';
   moment.locale('en')
 
   var now = new Date(Date.now())
   
   export default defineComponent({
     name: 'EditPet',
-    components: { Datepicker },
+    components: { Datepicker, Multiselect },
     props: ['id'],
     setup() {
         const date = ref(new Date())
@@ -79,14 +81,15 @@
 
         return {
             handleAge,
+            petUsers: [this.$store.state.users],
             form: {
                 name: '',
                 created_date: now,
-                age: '',
-                dob: this.date,
+                age: age,
+                dob: '',
                 height: '',
                 weight: '',
-                description: ''
+                description: '',
             },
         };
     },
@@ -94,22 +97,10 @@
       this.GetPet();
     },
     computed: {
-      ...mapGetters({ pet: 'statePet' }),
+      ...mapGetters({ pet: 'statePet'}),
     },
     methods: {
-      ...mapActions(['updateNote', 'viewPet']),
-      async submit() {
-      try {
-        let pet = {
-          id: this.id,
-          form: this.form,
-        };
-        await this.updatePet(pet);
-        this.$router.push({name: 'Pet', params:{id: this.pet.id}});
-      } catch (error) {
-        console.log(error);
-      }
-      },
+      ...mapActions(['updatePet', 'viewPet']),
       async GetPet() {
         try {
           await this.viewPet(this.id);
@@ -123,7 +114,22 @@
           console.error(error);
           this.$router.push('/dashboard');
         }
-      }
+      },
+     async submit() {
+        try {
+          let pet = {
+            id: this.id,
+            form: this.form,
+          }
+          console.log(this.addPetUserList)
+          await this.updatePet(pet);
+          this.$router.push({name: 'Pet', params:{id: this.pet.id}});
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
   });
   </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

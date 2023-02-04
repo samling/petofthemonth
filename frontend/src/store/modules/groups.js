@@ -30,6 +30,22 @@ const actions = {
         await axios.patch(`group/${group.id}`, group.form)
     },
 
+    async addGroupUser({}, group) {
+        await axios.patch(`group/${group.id}/users/${group.user_id}`, group.form)
+    },
+
+    async removeGroupUser({}, group) {
+        await axios.delete(`group/${group.id}/users/${group.user_id}`, group.form)
+    },
+
+    async addGroupPet({}, group) {
+        await axios.patch(`group/${group.id}/pets/${group.pet_id}`, group.form)
+    },
+
+    async removeGroupPet({}, group) {
+        await axios.delete(`group/${group.id}/pets/${group.pet_id}`, group.form)
+    },
+
     async deleteGroup({}, id) {
         await axios.delete(`group/${id}`)
     }

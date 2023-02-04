@@ -15,6 +15,19 @@
 
 ## Running (Development)
 
+1. Start the database docker containers:
+  ```
+  docker compose up -d
+  ```
+
+1. (Optional) From the backend folder, initialize database and run migrations:
+  ```
+  aerich init -t src.database.config.TORTOISE_ORM
+  aerich init-db
+  aerich migrate
+  aerich upgrade
+  ```
+
 1. Start the API server:
   ```
   python main.py

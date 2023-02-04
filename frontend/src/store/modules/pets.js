@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const state = {
     pets: null,
-    pet: null
+    pet: null,
 }
 
 const getters = {
@@ -28,6 +28,14 @@ const actions = {
 
     async updatePet({}, pet) {
         await axios.patch(`pet/${pet.id}`, pet.form)
+    },
+
+    async addPetUser({}, pet) {
+        await axios.patch(`pets/${pet.id}/users/${pet.user_id}`, pet.form)
+    },
+
+    async removePetUser({}, pet) {
+        await axios.delete(`pets/${pet.id}/users/${pet.user_id}`, pet.form)
     },
 
     async deletePet({}, id) {

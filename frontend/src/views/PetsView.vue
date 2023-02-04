@@ -36,12 +36,14 @@
       <hr/><br/>
 
       <div v-for="pet in pets" :key="pet.id" class="pets">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <ul>
-              <li><strong>Pet Name:</strong> {{ pet.name }}</li>
-              <li><router-link :to="{name: 'Pet', params:{id: pet.id}}">View</router-link></li>
-            </ul>
+        <div v-for="user in pet.users" :key="pet.id" class="pets">
+          <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(user.id)" style="width: 18rem;">
+            <div class="card-body">
+              <ul>
+                <li><strong>Pet Name:</strong> {{ pet.name }}</li>
+                <li><router-link :to="{name: 'Pet', params:{id: pet.id}}">View</router-link></li>
+              </ul>
+            </div>
           </div>
         </div>
         <br/>
@@ -96,7 +98,6 @@ export default defineComponent({
       handleAge,
       form: {
         name: "",
-        created_date: now,
         age: age,
         dob: this.date,
         height: "",

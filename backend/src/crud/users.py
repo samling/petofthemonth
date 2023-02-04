@@ -8,6 +8,9 @@ from src.schemas.users import UserOutSchema
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+async def get_users():
+    return await UserOutSchema.from_queryset(Users.all())
+
 async def create_user(user) -> UserOutSchema:
     user.password = pwd_context.encrypt(user.password)
 

@@ -13,9 +13,6 @@ from src.routes import users, groups, pets, points
 
 app = FastAPI()
 
-Tortoise.init_models(["src.database.models"], "models")
-# app.include_router(routes.router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
