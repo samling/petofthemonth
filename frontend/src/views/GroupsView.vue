@@ -24,14 +24,16 @@
       <hr/><br/>
 
       <div v-for="group in groups" :key="group.id" class="groups">
-        <!-- <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(group.users[0].id)" style="width: 18rem;"> -->
-        {{ group.users[0] }}
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <ul>
-              <li><strong>Groups:</strong> {{ group.name }}</li>
-              <li><router-link :to="{name: 'Group', params:{id: group.id}}">View</router-link></li>
-            </ul>
+        <div v-for="user in group.users">
+          <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(user.id)" style="width: 18rem;">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <ul>
+                  <li><strong>Groups:</strong> {{ group.name }}</li>
+                  <li><router-link :to="{name: 'Group', params:{id: group.id}}">View</router-link></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <br/>

@@ -4,7 +4,7 @@
       <p><strong>Description:</strong> {{ group.description }}</p>
       <p><strong>Members:</strong>
         <p v-for='groupUser in group.users'>
-          {{ groupUser.username }}
+          {{ groupUser.username }}<button type="button" @click="removeGroupUserByList(groupUser.id)">X</button>
         </p>
       <span><button @click="editGroupUsersToggle()"><span v-if="!editGroupUserState">Add Member</span><span v-else>Close</span></button></span></p>
       <p v-if="editGroupUserState"><strong>Add member:</strong></p>
@@ -26,7 +26,7 @@
       <p v-else></p>
       <p><strong>Pets:</strong>
         <p v-for='groupPet in group.pets'>
-          {{ groupPet.name }}
+          {{ groupPet.name }}<button type="button" @click="removeGroupPetByList(groupPet.id)">X</button>
         </p>
       <span><button @click="editGroupPetsToggle()"><span v-if="!editGroupPetState">Add Pet</span><span v-else>Close</span></button></span></p>
       <p v-if="editGroupPetState"><strong>Add pet:</strong></p>
@@ -109,13 +109,15 @@
       async GetAvailablePets() {
         let availablePetList = []
         let groupPets = this.group.pets.map(v => v.id)
+        let current_user = this.$store.state.users.user.id
         axios
           .get('pets')
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let pet_id = response.data[i].id
+              let pet_owners = response.data[i].users.map(v => v.id)
 
-              if (!new Set(groupPets).has(pet_id)) {
+              if (!new Set(groupPets).has(pet_id) && new Set(pet_owners).has(current_user)) {
                 availablePetList.push(response.data[i])
               }
               this.groupPets = availablePetList
@@ -138,6 +140,30 @@
         this.editGroupPetState = !this.editGroupPetState
         if (this.editGroupPetState == true) {
           await this.GetAvailablePets()
+        }
+      },
+      async removeGroupUserByList(user_id) {
+        try {
+          let user = {
+            id: parseInt(this.id),
+            user_id: parseInt(user_id)
+          }
+          await this.removeGroupUser(user);
+          window.location.reload();
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      async removeGroupPetByList(pet_id) {
+        try {
+          let pet = {
+            id: parseInt(this.id),
+            pet_id: parseInt(pet_id)
+          }
+          await this.removeGroupPet(pet);
+          window.location.reload();
+        } catch (error) {
+          console.log(error)
         }
       },
       async removeGroup() {
