@@ -1,40 +1,12 @@
 <template>
   <div>
     <section>
-      <h1>Add new pet</h1>
-      <hr/><br/>
-
-      <form @submit.prevent="submit">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name:</label>
-          <input type="text" name="name" v-model="form.name" class="form-control" />
-
-          <label for="description" class="form-label">Description:</label>
-          <input type="text" name="description" v-model="form.description" class="form-control" />
-
-          <label for="age" class="form-label">Age:</label>
-          <input type="text" name="age" v-model="form.age" class="form-control" />
-
-          <label for="dob" class="form-label">Date of Birth:</label>
-          <Datepicker name="dob" v-model="form.dob" @update:model-value="handleAge" class="form-control" auto-apply :close-on-auto-apply="true" :format="format" />
-
-          <label for="height" class="form-label">Height:</label>
-          <input type="text" name="height" v-model="form.height" class="form-control" />
-
-          <label for="weight" class="form-label">Weight:</label>
-          <input type="text" name="weight" v-model="form.weight" class="form-control" />
-
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+      <router-link :to="{name: 'AddPet'}">Add Pet</router-link>
     </section>
 
-    <br/><br/>
-
     <section>
-      <h1>Pets</h1>
+      <h1>My Pets</h1>
       <hr/><br/>
-
       <div v-for="pet in pets" :key="pet.id" class="pets">
         <div v-for="user in pet.users" :key="pet.id" class="pets">
           <div class="card" v-if="parseInt(this.$store.state.users.user.id) === parseInt(user.id)" style="width: 18rem;">

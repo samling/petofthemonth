@@ -26,6 +26,11 @@ class Groups(models.Model):
 
     pets: fields.ManyToManyRelation["Pets"] = fields.ManyToManyField("models.Pets", related_name="groups", through="group_pets")
 
+class PetImages(models.Model):
+    id          = fields.IntField(pk=True)
+    filename    = fields.TextField()
+    pet         = fields.ForeignKeyField("models.Pets", related_name="images")
+
 class Pets(models.Model):
     id          = fields.IntField(pk=True)
     name        = fields.CharField(max_length=50, null=True)
@@ -36,6 +41,8 @@ class Pets(models.Model):
     height      = fields.IntField()
     weight      = fields.IntField()
     dob         = fields.DatetimeField()
+    
+    images      = fields.ManyToManyRelation[PetImages]
 
     users       = fields.ManyToManyRelation[Users]
 

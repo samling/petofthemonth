@@ -9,7 +9,7 @@ from tortoise import Tortoise
 
 from src.database.register import register_tortoise
 from src.database.config import TORTOISE_ORM
-from src.routes import users, groups, pets, points
+from src.routes import users, groups, pets, points, petimages
 
 app = FastAPI()
 
@@ -24,6 +24,7 @@ app.include_router(users.router)
 app.include_router(groups.router)
 app.include_router(pets.router)
 app.include_router(points.router)
+app.include_router(petimages.router)
 
 register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 

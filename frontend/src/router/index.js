@@ -11,6 +11,7 @@ import GroupView from '@/views/GroupView.vue'
 import EditGroupView from '@/views/EditGroupView.vue'
 import PetsView from '@/views/PetsView.vue'
 import PetView from '@/views/PetView.vue'
+import AddPetView from '@/views/AddPetView.vue'
 import EditPetView from '@/views/EditPetView.vue'
 import store from '@/store';
 
@@ -88,6 +89,13 @@ const router = createRouter({
       path: '/pet/:id',
       name: 'Pet',
       component: PetView,
+      meta: { requiresAuth: true },
+      props: true
+    },
+    {
+      path: '/addpet',
+      name: 'AddPet',
+      component: AddPetView,
       meta: { requiresAuth: true },
       props: true
     },
