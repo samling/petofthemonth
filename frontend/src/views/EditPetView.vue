@@ -2,6 +2,8 @@
     <section>
       <h1>Edit Pet</h1>
       <hr/><br/>
+
+      <FileUpload :maxSize="5" :petId="parseInt(pet_id)" accept="png,jpg,jpeg" />
   
       <form @submit.prevent="submit">
         <div class="mb-3">
@@ -41,6 +43,7 @@
   import { defineComponent, ref } from 'vue';
   import { mapGetters, mapActions } from 'vuex';
 
+  import FileUpload from "@/components/FileUpload.vue";
   import Multiselect from 'vue-multiselect'
   import Datepicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
@@ -52,7 +55,7 @@
   
   export default defineComponent({
     name: 'EditPet',
-    components: { Datepicker, Multiselect },
+    components: { Datepicker, Multiselect, FileUpload },
     props: ['id'],
     setup() {
         const date = ref(new Date())
@@ -82,6 +85,7 @@
         return {
             handleAge,
             petUsers: [this.$store.state.users],
+            pet_id: this.id,
             form: {
                 name: '',
                 created_date: now,

@@ -40,6 +40,11 @@ const actions = {
 
     async deletePet({}, id) {
         await axios.delete(`pet/${id}`)
+    },
+
+    async uploadPetImage({}, pet) {
+        console.log(pet)
+        await axios.post(`pets/${pet.id}/images/`, pet.form)
     }
 }
 

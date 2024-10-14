@@ -9,6 +9,7 @@ from src.auth.jwthandler import get_current_user
 from src.database.models import Points, Pets
 from src.schemas.pets import PetInSchema, PetOutSchema, UpdatePet
 from src.schemas.points import PointInSchema, PointOutSchema, UpdatePoint
+from src.schemas.petimages import PetImageInSchema, PetImageOutSchema, UpdatePetImage
 from src.schemas.token import Status
 from src.schemas.users import UserOutSchema
 
@@ -71,6 +72,15 @@ async def create_pet_point(
     pet_id: int, point: PointInSchema, current_user: UserOutSchema = Depends(get_current_user)
 ) -> PointOutSchema:
     return await crud.create_pet_point(pet_id, point, current_user)
+
+@router.post(
+    "/pets/{pet_id}/images/",
+    response_model=PetImageOutSchema
+)
+async def upload_pet_image(
+    pet_id: int, image: PetImageInSchema, current_user: UserOutSchema = Depends(get_current_user)
+) -> PetImageOutSchema:
+    return await crud.upload_pet_image(pet_id, image, current_user)
 
 @router.patch(
     "/pets/{pet_id}/users/{user_id}",

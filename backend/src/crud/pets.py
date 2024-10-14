@@ -4,6 +4,7 @@ from tortoise.exceptions import DoesNotExist
 
 from src.database.models import Pets, Points, Groups, Users
 from src.schemas.pets import PetOutSchema
+from src.schemas.petimages import PetImageOutSchema
 from src.schemas.points import PointOutSchema
 from src.schemas.users import UserOutSchema
 from src.schemas.token import Status
@@ -54,6 +55,12 @@ async def update_pet_users(request, pet_id, user_id, current_user) -> PetOutSche
         return await PetOutSchema.from_queryset_single(Pets.get(id=pet_id))
 
     raise HTTPException(status_code=403, detail=f"Not authorized")
+
+async def upload_pet_image(pet_id, image, current_user) -> PetImageOutSchema:
+    try:
+        return
+    except HTTPException:
+        return
 
 async def update_pet(pet_id, pet, current_user) -> PetOutSchema:
     try:
